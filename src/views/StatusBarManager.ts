@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { UsageMetrics, formatTokenCount, formatNumber } from '../models/UsageMetrics';
+import { UsageMetrics, formatTokenCount, formatNumber, getSonnetQuota } from '../models/UsageMetrics';
 
 export class StatusBarManager implements vscode.Disposable {
   private readonly quotaBarItem: vscode.StatusBarItem;
@@ -67,12 +67,13 @@ export class StatusBarManager implements vscode.Disposable {
       return;
     }
 
-    // Get the most critical quota (highest usage)
+    // Get quotas - use helper for Sonnet which may be in different fields
     const fiveHour = metrics.quota.five_hour?.utilization ?? 0;
     const sevenDay = metrics.quota.seven_day?.utilization ?? 0;
-    const sevenDayOpus = metrics.quota.seven_day_opus?.utilization ?? 0;
+    const sonnetQuota = getSonnetQuota(metrics.quota);
+    const sonnetUsage = sonnetQuota?.utilization ?? 0;
 
-    // Display format: "5h: 25% | 7d: 40%"
+    // Display format: "5h: 25% | 7d: 40% | Sonnet: 30%"
     const parts: string[] = [];
 
     if (metrics.quota.five_hour) {
@@ -81,12 +82,12 @@ export class StatusBarManager implements vscode.Disposable {
     if (metrics.quota.seven_day) {
       parts.push(`7d: ${sevenDay.toFixed(0)}%`);
     }
-    if (metrics.quota.seven_day_opus && sevenDayOpus > 0) {
-      parts.push(`Sonnet: ${sevenDayOpus.toFixed(0)}%`);
+    if (sonnetQuota) {
+      parts.push(`Sonnet: ${sonnetUsage.toFixed(0)}%`);
     }
 
     // Determine color based on highest usage
-    const maxUsage = Math.max(fiveHour, sevenDay, sevenDayOpus);
+    const maxUsage = Math.max(fiveHour, sevenDay, sonnetUsage);
     let icon = '$(check)';
     let bgColor: vscode.ThemeColor | undefined = undefined;
 
@@ -154,11 +155,13 @@ export class StatusBarManager implements vscode.Disposable {
       md.appendMarkdown(`- Resets in: ${resetTime}\n\n`);
     }
 
-    if (metrics.quota?.seven_day_opus && metrics.quota.seven_day_opus.utilization > 0) {
-      const q = metrics.quota.seven_day_opus;
-      const resetTime = q.resets_at ? this.formatResetTime(q.resets_at) : 'Unknown';
-      md.appendMarkdown(`**Weekly (Sonnet):** ${q.utilization.toFixed(0)}% used\n`);
-      md.appendMarkdown(`- Resets in: ${resetTime}\n\n`);
+    if (metrics.quota) {
+      const sonnetQ = getSonnetQuota(metrics.quota);
+      if (sonnetQ) {
+        const resetTime = sonnetQ.resets_at ? this.formatResetTime(sonnetQ.resets_at) : 'Unknown';
+        md.appendMarkdown(`**Weekly (Sonnet):** ${sonnetQ.utilization.toFixed(0)}% used\n`);
+        md.appendMarkdown(`- Resets in: ${resetTime}\n\n`);
+      }
     }
 
     md.appendMarkdown('---\n');

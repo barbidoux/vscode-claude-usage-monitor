@@ -2,11 +2,13 @@ import * as vscode from 'vscode';
 import * as crypto from 'node:crypto';
 import {
   UsageMetrics,
+  QuotaData,
   formatTokenCount,
   formatNumber,
   formatDuration,
   getModelDisplayName,
-  getModelColor
+  getModelColor,
+  getSonnetQuota
 } from '../models/UsageMetrics';
 import { ClaudeDataService } from '../services/ClaudeDataService';
 import { escapeHtml } from '../utils/htmlEscape';
@@ -214,23 +216,7 @@ export class UsageDashboardProvider implements vscode.WebviewViewProvider {
       dataAvailable: metrics.dataAvailable,
       error: metrics.error,
       // Quota data from API
-      quota: metrics.quota ? {
-        fiveHour: metrics.quota.five_hour ? {
-          utilization: metrics.quota.five_hour.utilization,
-          resetsAt: metrics.quota.five_hour.resets_at,
-          resetsIn: this._formatTimeUntilReset(metrics.quota.five_hour.resets_at)
-        } : null,
-        sevenDay: metrics.quota.seven_day ? {
-          utilization: metrics.quota.seven_day.utilization,
-          resetsAt: metrics.quota.seven_day.resets_at,
-          resetsIn: this._formatTimeUntilReset(metrics.quota.seven_day.resets_at)
-        } : null,
-        sevenDayOpus: metrics.quota.seven_day_opus ? {
-          utilization: metrics.quota.seven_day_opus.utilization,
-          resetsAt: metrics.quota.seven_day_opus.resets_at,
-          resetsIn: this._formatTimeUntilReset(metrics.quota.seven_day_opus.resets_at)
-        } : null
-      } : null,
+      quota: metrics.quota ? this._formatQuotaData(metrics.quota) : null,
       quotaError: metrics.quotaError
     };
   }
@@ -258,6 +244,27 @@ export class UsageDashboardProvider implements vscode.WebviewViewProvider {
     }
 
     return `${minutes}m`;
+  }
+
+  private _formatQuotaData(quota: QuotaData) {
+    const sonnetQuota = getSonnetQuota(quota);
+    return {
+      fiveHour: quota.five_hour ? {
+        utilization: quota.five_hour.utilization,
+        resetsAt: quota.five_hour.resets_at,
+        resetsIn: this._formatTimeUntilReset(quota.five_hour.resets_at)
+      } : null,
+      sevenDay: quota.seven_day ? {
+        utilization: quota.seven_day.utilization,
+        resetsAt: quota.seven_day.resets_at,
+        resetsIn: this._formatTimeUntilReset(quota.seven_day.resets_at)
+      } : null,
+      sevenDaySonnet: sonnetQuota ? {
+        utilization: sonnetQuota.utilization,
+        resetsAt: sonnetQuota.resets_at,
+        resetsIn: this._formatTimeUntilReset(sonnetQuota.resets_at)
+      } : null
+    };
   }
 
   private _formatDateLabel(dateStr: string): string {
@@ -956,7 +963,7 @@ export class UsageDashboardProvider implements vscode.WebviewViewProvider {
             <div class="quota-container">
               \${renderQuotaBar(data.quota.fiveHour, '5-Hour Session', '⏱️')}
               \${renderQuotaBar(data.quota.sevenDay, 'Weekly (All Models)', '📅')}
-              \${renderQuotaBar(data.quota.sevenDayOpus, 'Weekly (Sonnet)', '🎯')}
+              \${renderQuotaBar(data.quota.sevenDaySonnet, 'Weekly (Sonnet)', '🎯')}
             </div>
           </div>
         \` : data.quotaError ? \`

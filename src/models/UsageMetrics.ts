@@ -11,7 +11,16 @@ export interface QuotaData {
   five_hour: QuotaUsage | null;
   seven_day: QuotaUsage | null;
   seven_day_oauth_apps: QuotaUsage | null;
-  seven_day_opus: QuotaUsage | null;
+  seven_day_opus: QuotaUsage | null;      // Legacy name for Sonnet quota
+  seven_day_sonnet: QuotaUsage | null;    // Newer name for Sonnet quota
+}
+
+/**
+ * Get the Sonnet-specific quota from QuotaData.
+ * The API may use 'seven_day_sonnet' or legacy 'seven_day_opus' for this.
+ */
+export function getSonnetQuota(quota: QuotaData): QuotaUsage | null {
+  return quota.seven_day_sonnet ?? quota.seven_day_opus ?? null;
 }
 
 export interface ModelUsage {
