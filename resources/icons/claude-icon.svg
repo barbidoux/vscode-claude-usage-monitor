@@ -1,0 +1,9 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Dashboard/chart icon representing usage monitoring -->
+  <path d="M3 3H21V21H3V3Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+  <path d="M7 14V17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  <path d="M12 10V17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  <path d="M17 7V17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  <!-- Small dot indicating active monitoring -->
+  <circle cx="19" cy="5" r="2" fill="currentColor"/>
+</svg>

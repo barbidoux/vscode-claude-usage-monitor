@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir \"c:\\\\Users\\\\matth\" /A:HD /B)",
+      "Bash(du:*)",
+      "Bash(dir /b \"C:\\\\Users\\\\matth\\\\.claude\")",
+      "Bash(dir /b \"C:\\\\Users\\\\matth\\\\.claude\\\\config\")",
+      "Bash(powershell -Command \"Get-Content ''C:\\\\Users\\\\matth\\\\.claude\\\\history.jsonl'' | Select-Object -Last 5\")",
+      "Bash(npm run compile:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(dir:*)"
+    ]
+  }
+}

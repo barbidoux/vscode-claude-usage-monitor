@@ -1,0 +1,142 @@
+{
+  "name": "claude-usage-monitor",
+  "displayName": "Claude Usage Monitor",
+  "description": "Monitor your Claude usage with an always-visible dashboard showing quota, token usage, and statistics",
+  "version": "0.1.0",
+  "publisher": "claude-user",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other",
+    "Visualization"
+  ],
+  "keywords": [
+    "claude",
+    "anthropic",
+    "usage",
+    "monitor",
+    "dashboard",
+    "tokens"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "claude-usage-monitor",
+          "title": "Claude Usage",
+          "icon": "resources/icons/claude-icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "claude-usage-monitor": [
+        {
+          "id": "claudeUsageOverview",
+          "name": "Dashboard",
+          "type": "webview"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "claudeMonitor.refresh",
+        "title": "Claude Monitor: Refresh Usage Data",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "claudeMonitor.openSettings",
+        "title": "Claude Monitor: Open Settings"
+      },
+      {
+        "command": "claudeMonitor.setRefreshMode",
+        "title": "Claude Monitor: Set Refresh Mode"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "claudeMonitor.refresh",
+          "when": "view == claudeUsageOverview",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Claude Usage Monitor",
+      "properties": {
+        "claudeMonitor.refreshMode": {
+          "type": "string",
+          "enum": [
+            "realtime",
+            "periodic",
+            "manual"
+          ],
+          "enumDescriptions": [
+            "Real-time updates (every 5-10 seconds)",
+            "Periodic updates (configurable interval)",
+            "Manual refresh only"
+          ],
+          "default": "periodic",
+          "description": "How often to refresh usage data"
+        },
+        "claudeMonitor.refreshInterval": {
+          "type": "number",
+          "default": 30,
+          "minimum": 5,
+          "maximum": 300,
+          "description": "Refresh interval in seconds (for periodic mode)"
+        },
+        "claudeMonitor.realtimeInterval": {
+          "type": "number",
+          "default": 5,
+          "minimum": 3,
+          "maximum": 30,
+          "description": "Refresh interval in seconds (for realtime mode)"
+        },
+        "claudeMonitor.showStatusBar": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show usage indicator in the status bar"
+        },
+        "claudeMonitor.statusBarPosition": {
+          "type": "string",
+          "enum": [
+            "left",
+            "right"
+          ],
+          "default": "right",
+          "description": "Position of the status bar item"
+        },
+        "claudeMonitor.claudeDataPath": {
+          "type": "string",
+          "default": "",
+          "description": "Custom path to Claude data directory (leave empty for default ~/.claude)"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^6.13.0",
+    "@typescript-eslint/parser": "^6.13.0",
+    "eslint": "^8.54.0",
+    "typescript": "^5.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  }
+}
