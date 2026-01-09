@@ -57,6 +57,23 @@ A VS Code extension that displays real-time Claude usage metrics in an always-vi
 
 ## Installation
 
+### From VSIX (Recommended)
+
+1. Download the latest `.vsix` file from [GitHub Releases](https://github.com/barbidoux/vscode-claude-usage-monitor/releases)
+
+2. Install via command line:
+   ```bash
+   code --install-extension claude-usage-monitor-0.1.0.vsix
+   ```
+
+   Or install via VS Code UI:
+   - Open VS Code
+   - Press `Ctrl+Shift+P` (or `Cmd+Shift+P` on Mac)
+   - Type "Install from VSIX"
+   - Select the downloaded `.vsix` file
+
+3. Reload VS Code when prompted
+
 ### From Source
 
 1. Clone the repository:
@@ -75,13 +92,18 @@ A VS Code extension that displays real-time Claude usage metrics in an always-vi
    npm run compile
    ```
 
-4. Open in VS Code and press `F5` to launch Extension Development Host
+4. Package as VSIX:
+   ```bash
+   npm install -g @vscode/vsce
+   vsce package
+   ```
 
-### From VSIX (when available)
+5. Install the generated VSIX:
+   ```bash
+   code --install-extension claude-usage-monitor-0.1.0.vsix
+   ```
 
-```bash
-code --install-extension claude-usage-monitor-0.1.0.vsix
-```
+   Or press `F5` in VS Code to launch Extension Development Host for testing
 
 ## Requirements
 
