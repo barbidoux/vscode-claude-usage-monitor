@@ -945,8 +945,8 @@ export class UsageDashboardProvider implements vscode.WebviewViewProvider {
             <span class="badge">\${formatSub(data.subscription.type)}</span>
           </div>
           <div class="header-actions" role="toolbar" aria-label="Dashboard actions">
-            <button class="btn" onclick="refresh()" title="Refresh usage data" aria-label="Refresh usage data">🔄</button>
-            <button class="btn" onclick="openSettings()" title="Open settings" aria-label="Open Claude Monitor settings">⚙️</button>
+            <button class="btn" id="refreshBtn" title="Refresh usage data" aria-label="Refresh usage data">🔄</button>
+            <button class="btn" id="settingsBtn" title="Open settings" aria-label="Open Claude Monitor settings">⚙️</button>
           </div>
         </div>
 
@@ -1167,16 +1167,28 @@ export class UsageDashboardProvider implements vscode.WebviewViewProvider {
       \`;
     }
 
-    function refresh() {
-      vscode.postMessage({ command: 'refresh' });
-    }
+    function attachButtonListeners() {
+      const refreshBtn = document.getElementById('refreshBtn');
+      const settingsBtn = document.getElementById('settingsBtn');
 
-    function openSettings() {
-      vscode.postMessage({ command: 'openSettings' });
+      if (refreshBtn) {
+        refreshBtn.addEventListener('click', () => {
+          vscode.postMessage({ command: 'refresh' });
+        });
+      }
+
+      if (settingsBtn) {
+        settingsBtn.addEventListener('click', () => {
+          vscode.postMessage({ command: 'openSettings' });
+        });
+      }
     }
 
     window.addEventListener('message', event => {
-      if (event.data.type === 'update') render(event.data.data);
+      if (event.data.type === 'update') {
+        render(event.data.data);
+        attachButtonListeners();
+      }
     });
   </script>
 </body>

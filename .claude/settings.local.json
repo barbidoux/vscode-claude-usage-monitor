@@ -9,7 +9,9 @@
       "Bash(npm run compile:*)",
       "Bash(git init:*)",
       "Bash(git add:*)",
-      "Bash(dir:*)"
+      "Bash(dir:*)",
+      "Bash(gh release create v0.1.0 claude-usage-monitor-0.1.0.vsix --title \"v0.1.0 - Initial Release\" --notes \"$\\(cat <<''EOF''\n## Claude Usage Monitor v0.1.0\n\nA VS Code extension that displays real-time Claude usage metrics in an always-visible sidebar dashboard and status bar.\n\n### Features\n- **Live Quota Monitoring** - Track 5-hour session, weekly, and Sonnet-specific limits\n- **Dashboard View** - Visual progress bars, token usage by model, daily activity charts\n- **Status Bar Integration** - Compact indicators with color-coded warnings\n- **Flexible Refresh** - Real-time, periodic, or manual refresh modes\n\n### Installation\n\n1. Download `claude-usage-monitor-0.1.0.vsix` below\n2. In VS Code: `Ctrl+Shift+P` → \"Install from VSIX\" → select the file\n3. Reload VS Code\n\nOr via command line:\n```bash\ncode --install-extension claude-usage-monitor-0.1.0.vsix\n```\n\n### Requirements\n- VS Code 1.85.0+\n- Claude Code CLI installed and authenticated\n- Claude Max subscription \\(or any subscription with quota limits\\)\n\n### Full Changelog\nSee [README]\\(https://github.com/barbidoux/vscode-claude-usage-monitor#readme\\) for complete documentation.\nEOF\n\\)\")",
+      "Bash(gh --version:*)"
     ]
   }
 }
