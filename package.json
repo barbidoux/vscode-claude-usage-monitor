@@ -137,6 +137,11 @@
   },
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/barbidoux/vscode-claude-usage-monitor"
+  },
+  "license": "SEE LICENSE IN LICENSE",
+  "homepage": "https://github.com/barbidoux/vscode-claude-usage-monitor#readme",
+  "bugs": {
+    "url": "https://github.com/barbidoux/vscode-claude-usage-monitor/issues"
   }
 }
